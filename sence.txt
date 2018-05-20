@@ -1,0 +1,182 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace calc
+{
+    class Program
+    {
+            static void Main(string[] args)
+            {
+                while (true) //Бесконечный цикл
+                {
+                    Console.Write("Введите выражение: "); //Предлагаем ввести выражение
+                    Console.WriteLine(RPN.Calculate(Console.ReadLine())); //Считываем, и выводим результат
+            }
+        }
+        }
+    class RPN
+    {
+        //Метод Calculate принимает выражение в виде строки и возвращает результат, в своей работе использует другие методы класса
+        //"Входной" метод класса
+        static public double Calculate(string input)
+        {
+            string output = GetExpression(input); //Преобразовываем выражение в постфиксную запись
+            double result = Counting(output); //Считаем полученное выражение
+            return result; //Возвращаем результат
+        }
+        //Метод, преобразующий входную строку в постфиксную запись
+        static private string GetExpression(string input)
+        {
+            string output = string.Empty; //Строка для хранения выражения
+            Stack<char> operStack = new Stack<char>(); //Стек для хранения операторов
+            for (int i = 0; i < input.Length; i++) //Для каждого символа в входной строке
+            {
+                //Разделители пропускаем
+                if (Is_Delimeter(input[i]))
+                    continue; //Переходим к следующему символу
+
+                //проверка на отрицательное число: если знак "-" в начале строки или перед знаком "-" нет числа 
+                if (input[i] == '-' && ((i > 0 && !Char.IsDigit(input[i - 1])) || i == 0))
+                {
+                    i++;
+                    output += "-";//в переменную для чисел добавляется знак "-"    
+                }
+
+                //Если символ - цифра, то считываем все число
+                if (Char.IsDigit(input[i])) //Если цифра
+                {
+                    //Читаем до разделителя или оператора, что бы получить число
+                    while (!Is_Delimeter(input[i]) && !Is_Operator(input[i]))
+                    {
+                        output += input[i]; //Добавляем каждую цифру числа к нашей строке
+                        i++; //Переходим к следующему символу
+
+                        if (i == input.Length) break; //Если символ - последний, то выходим из цикла
+                    }
+
+                    output += " "; //Дописываем после числа пробел в строку с выражением
+                    i--; //Возвращаемся на один символ назад, к символу перед разделителем
+                }
+
+                //Если символ - оператор
+                if (Is_Operator(input[i])) //Если оператор
+                {
+
+                    if (input[i] == '(') //Если символ - открывающая скобка
+                        operStack.Push(input[i]); //Записываем её в стек
+                    else if (input[i] == ')') //Если символ - закрывающая скобка
+                    {
+                        //Выписываем все операторы до открывающей скобки в строку
+                        char s = operStack.Pop();
+
+                        while (s != '(')
+                        {
+                            output += s.ToString() + ' ';
+
+                            s = operStack.Pop();
+                        }
+                    }
+                    else //Если любой другой оператор
+                    {
+                        if (operStack.Count > 0) //Если в стеке есть элементы
+                            if (GetPriority(input[i]) <= GetPriority(operStack.Peek())) //И если приоритет нашего оператора меньше или равен приоритету оператора на вершине стека
+                                output += operStack.Pop().ToString() + " "; //То добавляем последний оператор из стека в строку с выражением
+
+                        operStack.Push(char.Parse(input[i].ToString())); //Если стек пуст, или же приоритет оператора выше - добавляем операторов на вершину стека
+
+                    }
+                }
+            }
+
+            //Когда прошли по всем символам, выкидываем из стека все оставшиеся там операторы в строку
+            while (operStack.Count > 0)
+                output += operStack.Pop() + " ";
+
+            return output; //Возвращаем выражение в постфиксной записи
+
+        }
+
+        static private double Counting(string output)//метод решения OPN
+        {
+            string result;
+
+            string[] mas = output.Split(' ');
+
+            for (int i = 0; i < mas.Length; i++)
+
+                switch (mas[i])
+                {
+                    case "+"://если найдена операция сложения
+                        result = (double.Parse(mas[i - 2]) + double.Parse(mas[i - 1])).ToString();//выполняем сложение и переводим ее в строку
+                        mas[i - 2] = result;//на место 1-ого операнда записывается результат (как если бы a=a+b)
+                        for (int j = i - 1; j < mas.Length - 2; j++)//удаляем из массива второй операнд и знак арифм действия
+                            mas[j] = mas[j + 2];
+                        Array.Resize(ref mas, mas.Length - 2);//обрезаем массив элементов на 2 удаленнх элемента
+                        i -= 2;
+                        break;
+
+
+                    case "-"://далее все аналогично
+                        result = (double.Parse(mas[i - 2]) - double.Parse(mas[i - 1])).ToString();
+                        mas[i - 2] = result;
+                        for (int j = i - 1; j < mas.Length - 2; j++)
+                            mas[j] = mas[j + 2];
+                        Array.Resize(ref mas, mas.Length - 2);
+                        i -= 2;
+                        break;
+
+                    case "*":
+                        result = (double.Parse(mas[i - 2]) * double.Parse(mas[i - 1])).ToString();
+                        mas[i - 2] = result;
+                        for (int j = i - 1; j < mas.Length - 2; j++)
+                            mas[j] = mas[j + 2];
+                        Array.Resize(ref mas, mas.Length - 2);
+                        i -= 2;
+                        break;
+
+                    case "/":
+                        result = (double.Parse(mas[i - 2]) / double.Parse(mas[i - 1])).ToString();
+                        mas[i - 2] = result;
+                        for (int j = i - 1; j < mas.Length - 2; j++)
+                            mas[j] = mas[j + 2];
+                        Array.Resize(ref mas, mas.Length - 2);
+                        i -= 2;
+                        break;
+                }
+            return double.Parse(mas[0]);
+        }
+
+        //Метод возвращает приоритет оператора
+        static private byte GetPriority(char s)
+        {
+            switch (s)
+            {
+                case '(': return 0;
+                case ')': return 1;
+                case '+': return 2;
+                case '-': return 3;
+                case '*': return 4;
+                case '/': return 4;
+                default: return 5;
+            }
+        }
+        //Метод возвращает true, если проверяемый символ - оператор
+        static private bool Is_Operator(char с)
+        {
+            if (("+-/*^()".IndexOf(с) != -1))
+                return true;
+            return false;
+        }
+
+        //Метод возвращает true, если проверяемый символ - разделитель ("пробел" или "равно")
+        static private bool Is_Delimeter(char c)
+        {
+            if ((" =".IndexOf(c) != -1))
+                return true;
+            return false;
+        }
+    }
+}

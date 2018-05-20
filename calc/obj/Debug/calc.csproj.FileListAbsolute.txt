@@ -1,0 +1,6 @@
+D:\C#\calc\calc\bin\Debug\calc.exe.config
+D:\C#\calc\calc\obj\Debug\calc.csprojResolveAssemblyReference.cache
+D:\C#\calc\calc\bin\Debug\calc.exe
+D:\C#\calc\calc\bin\Debug\calc.pdb
+D:\C#\calc\calc\obj\Debug\calc.exe
+D:\C#\calc\calc\obj\Debug\calc.pdb
