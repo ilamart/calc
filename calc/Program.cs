@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
+
 
 namespace calc
 {
@@ -13,8 +13,8 @@ namespace calc
             {
                 do
                 {
-                    Console.Write("Введите выражение: ");
                     StringCalc rez = new StringCalc();
+                    Console.Write("Введите выражение: ");
                     input = Console.ReadLine();
                     rez.Calculate(input);
                     Console.WriteLine(rez._result);
@@ -29,62 +29,77 @@ namespace calc
         }
     }
 
-    public class Operation
+    public abstract class Operation
     {
+        public abstract string Code { get; }
 
-        public string operations = "+-/*^()";
+        public abstract double Evaluate(double oper1, double oper2);    
+    }
 
-        //public void OperationPlus
-        //{
-        //    result = (double.parse(mas[i - 2]) + double.parse(mas[i - 1])).tostring();
-        //    mas[i - 2] = result;
-        //    for (int j = i - 1; j<mas.length - 2; j++)
-        //        mas[j] = mas[j + 2];
-        //    array.resize(ref mas, mas.length - 2);
-        //    i -= 2;
-        //}
-        public double Evalute(string output)
+    public class OperationPlus : Operation
+    {
+        public override string Code { get { return "+"; } }
+
+        public override double Evaluate(double oper1, double oper2)
         {
-            string result;
-            string[] mas = output.Split(' ');
-            for (int i = 0; i < mas.Length; i++)
+            return (oper1 + oper2);
+        }
+    }
 
-                switch (mas[i])
-                {
-                    case "+":
-                        result = (double.Parse(mas[i - 2]) + double.Parse(mas[i - 1])).ToString();
-                        mas[i - 2] = result;
-                        for (int j = i - 1; j < mas.Length - 2; j++)
-                            mas[j] = mas[j + 2];
-                        Array.Resize(ref mas, mas.Length - 2);
-                        i -= 2;
-                        break;
-                    case "-":
-                        result = (double.Parse(mas[i - 2]) - double.Parse(mas[i - 1])).ToString();
-                        mas[i - 2] = result;
-                        for (int j = i - 1; j < mas.Length - 2; j++)
-                            mas[j] = mas[j + 2];
-                        Array.Resize(ref mas, mas.Length - 2);
-                        i -= 2;
-                        break;
-                    case "*":
-                        result = (double.Parse(mas[i - 2]) * double.Parse(mas[i - 1])).ToString();
-                        mas[i - 2] = result;
-                        for (int j = i - 1; j < mas.Length - 2; j++)
-                            mas[j] = mas[j + 2];
-                        Array.Resize(ref mas, mas.Length - 2);
-                        i -= 2;
-                        break;
-                    case "/":
-                        result = (double.Parse(mas[i - 2]) / double.Parse(mas[i - 1])).ToString();
-                        mas[i - 2] = result;
-                        for (int j = i - 1; j < mas.Length - 2; j++)
-                            mas[j] = mas[j + 2];
-                        Array.Resize(ref mas, mas.Length - 2);
-                        i -= 2;
-                        break;
-                }
-            return double.Parse(mas[0]);
+    public class OperationMinus : Operation
+    {
+        public override string Code { get { return "-"; } }
+
+        public override double Evaluate(double oper1, double oper2)
+        {
+            return (oper1 - oper2);
+        }
+    }
+
+    public class OperationMultiply : Operation
+    {
+        public override string Code { get { return "*"; } }
+
+        public override double Evaluate(double oper1, double oper2)
+        {
+            return (oper1 * oper2);
+        }
+    }
+
+    public class OperationDivide : Operation
+    {
+        public override string Code { get { return "/"; } }
+
+        public override double Evaluate(double oper1, double oper2)
+        {
+            return (oper1 / oper2);
+        }
+    }
+
+    public class OperationExpone : Operation
+    {
+        public override string Code { get { return "^"; } }
+
+        public override double Evaluate(double oper1, double oper2)
+        {
+            for (int i=0; i<(oper2-1); i++)
+            {
+                oper1 *= oper1;
+            }
+            return (oper1);
+        }
+    }
+
+    public class OperationMyDivide : Operation
+    {
+        public override string Code { get { return "%"; } }
+
+        public override double Evaluate(double oper1, double oper2)
+        {
+            int op1 = Convert.ToInt16(oper1);
+            int op2 = Convert.ToInt16(oper2);
+            int rez = op1 % op2;
+            return rez;
         }
     }
 }
