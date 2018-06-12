@@ -6,9 +6,6 @@ namespace calc
 {
     class StringCalc
     {
-        public string operations = "+-/*^()%";
-        //убрать строковую константу
-
         private static Operation[] _operations = { new OperationPlus(), new OperationMinus(), new OperationMultiply(), new OperationDivide(), new OperationExpone(), new OperationMyDivide() };
 
         public StringCalc()
@@ -38,6 +35,11 @@ namespace calc
         {
             string output = string.Empty;
             Stack<char> operStack = new Stack<char>();
+            
+            string op = string.Empty;
+            foreach (Operation elem in _operations)
+                op += elem.Code;
+            
             for (int i = 0; i < input.Length; i++)
             {
                 if (Is_Delimeter(input[i]))
@@ -50,7 +52,7 @@ namespace calc
 
                 if (Char.IsDigit(input[i]))
                 {
-                    while (!Is_Delimeter(input[i]) && !(operations.IndexOf(input[i]) != -1))
+                    while (!Is_Delimeter(input[i]) && !(op.IndexOf(input[i]) != -1))
                     {
                         output += input[i];
                         i++;
@@ -60,7 +62,7 @@ namespace calc
                     i--;
                 }
 
-                if (operations.IndexOf(input[i]) != -1)
+                if (op.IndexOf(input[i]) != -1)
                 {
                     if (input[i] == '(')
                         operStack.Push(input[i]);
@@ -96,10 +98,10 @@ namespace calc
                 case '+': return 2;
                 case '-': return 3;
                 case '*': return 4;
-                case '/': return 5;
-                case '^': return 6;
-                case '%': return 7;
-                default: return 8;
+                case '/': return 4;
+                case '^': return 4;
+                case '%': return 4;
+                default: return 5;
             }
         }
 
