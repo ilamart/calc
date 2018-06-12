@@ -39,6 +39,7 @@ namespace calc
             string op = string.Empty;
             foreach (Operation elem in _operations)
                 op += elem.Code;
+            op = op.Insert(op.Length,"()");
             
             for (int i = 0; i < input.Length; i++)
             {
@@ -78,29 +79,30 @@ namespace calc
                     else
                     {
                         if (operStack.Count > 0)
-                            if (GetPriority(input[i]) <= GetPriority(operStack.Peek()))
+                            if (GetPriority(input[i], op) <= GetPriority(operStack.Peek(),op ))
                                 output += operStack.Pop().ToString() + " ";
                         operStack.Push(char.Parse(input[i].ToString()));
                     }
                 }
+                
             }
             while (operStack.Count > 0)
                 output += operStack.Pop() + " ";
             return output;
         }
 
-        static private byte GetPriority(char s)
+        static private byte GetPriority(char s, string operators)
         {
-            switch (s)
+            switch (operators.IndexOf(s))
             {
-                case '(': return 0;
-                case ')': return 1;
-                case '+': return 2;
-                case '-': return 3;
-                case '*': return 4;
-                case '/': return 4;
-                case '^': return 4;
-                case '%': return 4;
+                case 6: return 0;
+                case 7: return 1;
+                case 0: return 2;
+                case 1: return 3;
+                case 2: return 4;
+                case 3: return 4;
+                case 4: return 4;
+                case 5: return 4;
                 default: return 5;
             }
         }
