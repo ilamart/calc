@@ -79,7 +79,7 @@ namespace calc
                     else
                     {
                         if (operStack.Count > 0)
-                            if (GetPriority(input[i], op) <= GetPriority(operStack.Peek(),op ))
+                            if (GetPriority(input[i].ToString(), _operations) <= GetPriority(operStack.Peek().ToString(), _operations))
                                 output += operStack.Pop().ToString() + " ";
                         operStack.Push(char.Parse(input[i].ToString()));
                     }
@@ -91,20 +91,15 @@ namespace calc
             return output;
         }
 
-        static private byte GetPriority(char s, string operators)
+        static private int GetPriority(string s, Operation[] oper)
         {
-            switch (operators.IndexOf(s))
+            if (oper != null)
             {
-                case 0: return 0;
-                case 1: return 1;
-                case 2: return 2;
-                case 3: return 3;
-                case 4: return 4;
-                case 5: return 4;
-                case 6: return 4;
-                case 7: return 4;
-                default: return 5;
+                foreach (Operation elem in _operations)
+                    if (elem.Code == s)
+                        return elem.Prior;
             }
+            return 0;
         }
 
         static private bool Is_Delimeter(char c)
