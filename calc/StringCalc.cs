@@ -39,7 +39,7 @@ namespace calc
             string op = string.Empty;
             foreach (Operation elem in _operations)
                 op += elem.Code;
-            op = op.Insert(op.Length,"()");
+            op = op.Insert(0,"()");
             
             for (int i = 0; i < input.Length; i++)
             {
@@ -95,14 +95,14 @@ namespace calc
         {
             switch (operators.IndexOf(s))
             {
-                case 6: return 0;
-                case 7: return 1;
-                case 0: return 2;
-                case 1: return 3;
-                case 2: return 4;
-                case 3: return 4;
+                case 0: return 0;
+                case 1: return 1;
+                case 2: return 2;
+                case 3: return 3;
                 case 4: return 4;
                 case 5: return 4;
+                case 6: return 4;
+                case 7: return 4;
                 default: return 5;
             }
         }
