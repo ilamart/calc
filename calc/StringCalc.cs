@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
 
-
 namespace calc
 {
     class StringCalc
     {
         private static Operation[] _operations = { new OperationPlus(), new OperationMinus(), new OperationMultiply(), new OperationDivide(), new OperationExpone(), new OperationMyDivide() };
+
+        private static Dictionary<string,int> Oper = new Dictionary<string,int>
+        {
+                { "(", 0 },
+                { ")", 1 }
+        };
 
         public StringCalc()
         {
@@ -35,12 +40,11 @@ namespace calc
         {
             string output = string.Empty;
             Stack<char> operStack = new Stack<char>();
-            
-            string op = string.Empty;
+
             foreach (Operation elem in _operations)
-                op += elem.Code;
-            op = op.Insert(0,"()");
-            
+                if (!Oper.ContainsKey(elem.Code))
+                    Oper.Add(elem.Code, elem.Prior);
+
             for (int i = 0; i < input.Length; i++)
             {
                 if (Is_Delimeter(input[i]))
@@ -53,7 +57,7 @@ namespace calc
 
                 if (Char.IsDigit(input[i]))
                 {
-                    while (!Is_Delimeter(input[i]) && !(op.IndexOf(input[i]) != -1))
+                    while (!Is_Delimeter(input[i]) && !(BeforOper(input[i].ToString()) != -1))
                     {
                         output += input[i];
                         i++;
@@ -63,7 +67,7 @@ namespace calc
                     i--;
                 }
 
-                if (op.IndexOf(input[i]) != -1)
+                if (BeforOper(input[i].ToString()) != -1)
                 {
                     if (input[i] == '(')
                         operStack.Push(input[i]);
@@ -79,27 +83,37 @@ namespace calc
                     else
                     {
                         if (operStack.Count > 0)
-                            if (GetPriority(input[i].ToString(), _operations) <= GetPriority(operStack.Peek().ToString(), _operations))
+                            if (GetPriority(input[i].ToString()) <= GetPriority(operStack.Peek().ToString()))
                                 output += operStack.Pop().ToString() + " ";
                         operStack.Push(char.Parse(input[i].ToString()));
                     }
                 }
-                
             }
             while (operStack.Count > 0)
                 output += operStack.Pop() + " ";
             return output;
         }
 
-        static private int GetPriority(string s, Operation[] oper)
+        static private int GetPriority(string s)
         {
-            if (oper != null)
+            if (_operations != null)
             {
                 foreach (Operation elem in _operations)
                     if (elem.Code == s)
                         return elem.Prior;
             }
             return 0;
+        }
+
+        static private int BeforOper(string s)
+        {
+            if (Oper.Keys != null)
+            {
+                foreach (KeyValuePair<string, int > elem in Oper)
+                    if (elem.Key == s)
+                        return elem.Value;
+            }
+            return -1;
         }
 
         static private bool Is_Delimeter(char c)
