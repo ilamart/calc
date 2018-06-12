@@ -57,7 +57,7 @@ namespace calc
 
                 if (Char.IsDigit(input[i]))
                 {
-                    while (!Is_Delimeter(input[i]) && !(BeforOper(input[i].ToString()) != -1))
+                    while (!Is_Delimeter(input[i]) && !(Oper.ContainsKey(input[i].ToString())))
                     {
                         output += input[i];
                         i++;
@@ -67,7 +67,7 @@ namespace calc
                     i--;
                 }
 
-                if (BeforOper(input[i].ToString()) != -1)
+                if (Oper.ContainsKey(input[i].ToString()))
                 {
                     if (input[i] == '(')
                         operStack.Push(input[i]);
@@ -103,17 +103,6 @@ namespace calc
                         return elem.Prior;
             }
             return 0;
-        }
-
-        static private int BeforOper(string s)
-        {
-            if (Oper.Keys != null)
-            {
-                foreach (KeyValuePair<string, int > elem in Oper)
-                    if (elem.Key == s)
-                        return elem.Value;
-            }
-            return -1;
         }
 
         static private bool Is_Delimeter(char c)
