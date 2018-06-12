@@ -1,6 +1,5 @@
 using System;
 
-
 namespace calc
 {
     class Program
@@ -32,7 +31,7 @@ namespace calc
     public abstract class Operation
     {
         public abstract string Code { get; }
-        
+
         public abstract int Prior { get; }
 
         public abstract double Evaluate(double oper1, double oper2);    
@@ -40,9 +39,9 @@ namespace calc
 
     public class OperationPlus : Operation
     {
-        public override string Code { get { return "+"; } }
-        
         public override int Prior { get { return 2; } }
+
+        public override string Code { get { return "+"; } }
 
         public override double Evaluate(double oper1, double oper2)
         {
@@ -52,9 +51,9 @@ namespace calc
 
     public class OperationMinus : Operation
     {
-        public override string Code { get { return "-"; } }
-        
         public override int Prior { get { return 3; } }
+
+        public override string Code { get { return "-"; } }
 
         public override double Evaluate(double oper1, double oper2)
         {
@@ -64,9 +63,9 @@ namespace calc
 
     public class OperationMultiply : Operation
     {
-        public override string Code { get { return "*"; } }
-        
         public override int Prior { get { return 4; } }
+
+        public override string Code { get { return "*"; } }
 
         public override double Evaluate(double oper1, double oper2)
         {
@@ -76,9 +75,9 @@ namespace calc
 
     public class OperationDivide : Operation
     {
-        public override string Code { get { return "/"; } }
-        
         public override int Prior { get { return 5; } }
+
+        public override string Code { get { return "/"; } }
 
         public override double Evaluate(double oper1, double oper2)
         {
@@ -88,9 +87,9 @@ namespace calc
 
     public class OperationExpone : Operation
     {
-        public override string Code { get { return "^"; } }
-        
         public override int Prior { get { return 6; } }
+
+        public override string Code { get { return "^"; } }
 
         public override double Evaluate(double oper1, double oper2)
         {
@@ -104,9 +103,9 @@ namespace calc
 
     public class OperationMyDivide : Operation
     {
-        public override string Code { get { return "%"; } }
-        
         public override int Prior { get { return 7; } }
+
+        public override string Code { get { return "%"; } }
 
         public override double Evaluate(double oper1, double oper2)
         {
