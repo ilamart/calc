@@ -96,8 +96,8 @@ namespace calc
 
         public override double Evaluate(double oper1, double oper2)
         {
-            int op1 = Convert.ToInt16(oper1);
-            int op2 = Convert.ToInt16(oper2);
+            int op1 = Convert.ToInt32(oper1);
+            int op2 = Convert.ToInt32(oper2);
             int rez = op1 % op2;
             return rez;
         }
