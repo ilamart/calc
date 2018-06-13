@@ -43,7 +43,7 @@ namespace calc
 
         public override double GetResult(double operand1, double operand2)
         {
-            return (operand1 + operand2);
+            return operand1 + operand2;
         }
     }
 
@@ -55,7 +55,7 @@ namespace calc
 
         public override double GetResult(double operand1, double operand2)
         {
-            return (operand1 - operand2);
+            return operand1 - operand2;
         }
     }
 
@@ -67,7 +67,7 @@ namespace calc
 
         public override double GetResult(double operand1, double operand2)
         {
-            return (operand1 * operand2);
+            return operand1 * operand2;
         }
     }
 
@@ -79,7 +79,7 @@ namespace calc
 
         public override double GetResult(double operand1, double operand2)
         {
-            return (operand1 / operand2);
+            return operand1 / operand2;
         }
     }
 
@@ -95,7 +95,7 @@ namespace calc
             {
                 operand1 *= operand1;
             }
-            return (operand1);
+            return operand1;
         }
     }
 
