@@ -37,7 +37,7 @@ namespace calc
 
             for (int i = 0; i < input.Length; i++)
             {
-                if (Is_Delimeter(input[i]))
+                if (IsDelimeter(input[i]))
                     continue;
                 if (input[i] == '-' && ((i > 0 && !Char.IsDigit(input[i - 1])) || i == 0))
                 {
@@ -47,7 +47,7 @@ namespace calc
 
                 if (Char.IsDigit(input[i]))
                 {
-                    while (!Is_Delimeter(input[i]) && !(op.IndexOf(input[i]) != -1))
+                    while (!IsDelimeter(input[i]) && !(op.IndexOf(input[i]) != -1))
                     {
                         output += input[i];
                         i++;
@@ -95,7 +95,7 @@ namespace calc
             return 0;
         }
 
-        static private bool Is_Delimeter(char c)
+        static private bool IsDelimeter(char c)
         {
             if ((" =".IndexOf(c) != -1))
                 return true;
