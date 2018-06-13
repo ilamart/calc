@@ -7,15 +7,13 @@ namespace calc
         static void Main(string[] args)
             {
             ConsoleKeyInfo es;
-            string input;
             try
             {
                 do
                 {
                     StringCalc rez = new StringCalc();
                     Console.Write("Введите выражение: ");
-                    input = Console.ReadLine();
-                    rez.Calculate(input);
+                    rez._result = rez.Calculation(rez.ConvertNotation(Console.ReadLine()));
                     Console.WriteLine(rez._result);
                     Console.WriteLine("ESC для выхода");
                     es = Console.ReadKey();
@@ -30,88 +28,88 @@ namespace calc
 
     public abstract class Operation
     {
-        public abstract string Code { get; }
+        public abstract string OpCode { get; }
 
-        public abstract int Prior { get; }
+        public abstract int Priority { get; }
 
-        public abstract double Evaluate(double oper1, double oper2);    
+        public abstract double GetResult(double operand1, double operand2);    
     }
 
     public class OperationPlus : Operation
     {
-        public override int Prior { get { return 2; } }
+        public override int Priority { get { return 2; } }
 
-        public override string Code { get { return "+"; } }
+        public override string OpCode { get { return "+"; } }
 
-        public override double Evaluate(double oper1, double oper2)
+        public override double GetResult(double operand1, double operand2)
         {
-            return (oper1 + oper2);
+            return (operand1 + operand2);
         }
     }
 
     public class OperationMinus : Operation
     {
-        public override int Prior { get { return 3; } }
+        public override int Priority { get { return 3; } }
 
-        public override string Code { get { return "-"; } }
+        public override string OpCode { get { return "-"; } }
 
-        public override double Evaluate(double oper1, double oper2)
+        public override double GetResult(double operand1, double operand2)
         {
-            return (oper1 - oper2);
+            return (operand1 - operand2);
         }
     }
 
     public class OperationMultiply : Operation
     {
-        public override int Prior { get { return 4; } }
+        public override int Priority { get { return 4; } }
 
-        public override string Code { get { return "*"; } }
+        public override string OpCode { get { return "*"; } }
 
-        public override double Evaluate(double oper1, double oper2)
+        public override double GetResult(double operand1, double operand2)
         {
-            return (oper1 * oper2);
+            return (operand1 * operand2);
         }
     }
 
     public class OperationDivide : Operation
     {
-        public override int Prior { get { return 5; } }
+        public override int Priority { get { return 5; } }
 
-        public override string Code { get { return "/"; } }
+        public override string OpCode { get { return "/"; } }
 
-        public override double Evaluate(double oper1, double oper2)
+        public override double GetResult(double operand1, double operand2)
         {
-            return (oper1 / oper2);
+            return (operand1 / operand2);
         }
     }
 
     public class OperationExpone : Operation
     {
-        public override int Prior { get { return 6; } }
+        public override int Priority { get { return 6; } }
 
-        public override string Code { get { return "^"; } }
+        public override string OpCode { get { return "^"; } }
 
-        public override double Evaluate(double oper1, double oper2)
+        public override double GetResult(double operand1, double operand2)
         {
-            for (int i=0; i<(oper2-1); i++)
+            for (int i=0; i<(operand2 - 1); i++)
             {
-                oper1 *= oper1;
+                operand1 *= operand1;
             }
-            return (oper1);
+            return (operand1);
         }
     }
 
     public class OperationMyDivide : Operation
     {
-        public override int Prior { get { return 7; } }
+        public override int Priority { get { return 7; } }
 
-        public override string Code { get { return "%"; } }
+        public override string OpCode { get { return "%"; } }
 
-        public override double Evaluate(double oper1, double oper2)
+        public override double GetResult(double operand1, double operand2)
         {
-            int op1 = Convert.ToInt32(oper1);
-            int op2 = Convert.ToInt32(oper2);
-            int rez = op1 % op2;
+            int oper1 = Convert.ToInt32(operand1);
+            int oper2 = Convert.ToInt32(operand2);
+            int rez = oper1 % oper2;
             return rez;
         }
     }
