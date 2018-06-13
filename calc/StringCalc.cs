@@ -6,24 +6,25 @@ namespace calc
     class StringCalc
     {
         private static Operation[] _operations = { new OperationPlus(), new OperationMinus(), new OperationMultiply(), new OperationDivide(), new OperationExpone(), new OperationMyDivide() };
-        
-        public StringCalc()
-        {
-        }
+
         public double _result;
 
         private double Result
         {
             set
             {
-                    _result = value;
+                _result = value;
             }
             get
             {
                 return _result;
             }
         }
-        
+
+        public StringCalc()
+        {
+        }
+
         public string ConvertNotation(string input)
         {
             string output = string.Empty;
