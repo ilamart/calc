@@ -6,13 +6,7 @@ namespace calc
     class StringCalc
     {
         private static Operation[] _operations = { new OperationPlus(), new OperationMinus(), new OperationMultiply(), new OperationDivide(), new OperationExpone(), new OperationMyDivide() };
-
-        private static Dictionary<string,int> Oper = new Dictionary<string,int>
-        {
-                { "(", 0 },
-                { ")", 1 }
-        };
-
+        
         public StringCalc()
         {
         }
@@ -29,21 +23,17 @@ namespace calc
                 return _result;
             }
         }
-
-        public void Calculate(string input)
-        {
-            string output = GetExpression(input);
-            _result = Analysis(output);
-        }
         
-        public string GetExpression(string input)
+        public string ConvertNotation(string input)
         {
             string output = string.Empty;
             Stack<char> operStack = new Stack<char>();
 
+            string op = string.Empty;
+            op += "()";
             foreach (Operation elem in _operations)
-                if (!Oper.ContainsKey(elem.Code))
-                    Oper.Add(elem.Code, elem.Prior);
+                if (op.IndexOf(elem.OpCode) == -1)
+                    op += elem.OpCode;
 
             for (int i = 0; i < input.Length; i++)
             {
@@ -57,7 +47,7 @@ namespace calc
 
                 if (Char.IsDigit(input[i]))
                 {
-                    while (!Is_Delimeter(input[i]) && !(Oper.ContainsKey(input[i].ToString())))
+                    while (!Is_Delimeter(input[i]) && !(op.IndexOf(input[i]) != -1))
                     {
                         output += input[i];
                         i++;
@@ -67,7 +57,7 @@ namespace calc
                     i--;
                 }
 
-                if (Oper.ContainsKey(input[i].ToString()))
+                if (op.IndexOf(input[i]) != -1)
                 {
                     if (input[i] == '(')
                         operStack.Push(input[i]);
@@ -96,11 +86,11 @@ namespace calc
 
         static private int GetPriority(string s)
         {
-            if (_operations != null)
+            if (s.Length != 0)
             {
                 foreach (Operation elem in _operations)
-                    if (elem.Code == s)
-                        return elem.Prior;
+                    if (elem.OpCode == s)
+                        return elem.Priority;
             }
             return 0;
         }
@@ -112,7 +102,7 @@ namespace calc
             return false;
         }
 
-        public double Analysis(string output)
+        public double Calculation(string output)
         {
             List<string> list = new List<string>(output.Split(' '));
             foreach (var s in list)
@@ -125,9 +115,9 @@ namespace calc
             {
                 foreach (Operation item in _operations)
                 {
-                    if (item.Code == list[i])
+                    if (item.OpCode == list[i])
                     {
-                        DubResult = item.Evaluate(double.Parse(list[i - 2]), double.Parse(list[i - 1]));
+                        DubResult = item.GetResult(double.Parse(list[i - 2]), double.Parse(list[i - 1]));
                         list[i - 2] = DubResult.ToString();
                         for (int j = i - 1; j < list.Count - 2; j++)
                             list[j] = list[j + 2];
